@@ -4,16 +4,15 @@ import Card from "./components/card/card";
 import Cart from "./components/cart/cart";
 import { productsGetAll } from "./api";
 
-const telegram = window.Telegram.WebApp;
+const telegram = window?.Telegram?.WebApp;
 
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
-
   useEffect(() => {
     telegram.ready();
   }, []);
-
+  console.log(telegram);
   useEffect(() => {
     productsGetAll()
       .then((data) => {
@@ -23,7 +22,7 @@ const App = () => {
       .catch((error) => {
         console.error("Error fetching products:", error);
       });
-  }, []);
+  }, [telegram]);
 
   const onAddItem = (item) => {
     const existItem = cartItems.find((c) => c.id === item.id);
