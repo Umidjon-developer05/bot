@@ -2,11 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import Card from "./components/card/card";
 import Cart from "./components/cart/cart";
-import { getData } from "./constants/db";
 import { categoryGetAll, productsGetAll } from "./api";
 import Category from "./components/category/category";
-
-const courses = getData();
 
 const telegram = window.Telegram.WebApp;
 
@@ -87,12 +84,11 @@ const App = () => {
 
   return (
     <>
-      {/* <div className="category__container">
+      <div className="category__container">
         {category.map((category) => (
           <Category key={category.id} category={category} />
         ))}
-      </div> */}
-      <h1>Heollodsddsd</h1>
+      </div>
       <Cart cartItems={cartItems} onCheckout={onCheckout} />
       <div className="cards__container">
         {products.map((course) => (
