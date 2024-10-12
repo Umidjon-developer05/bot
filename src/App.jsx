@@ -77,7 +77,7 @@ const App = () => {
       <div className="cards__container">
         {loading ? (
           <p>Loading products...</p> // Show loading state
-        ) : products.length > 0 ? (
+        ) : (
           products.map((course) => (
             <Card
               key={course._id}
@@ -86,8 +86,6 @@ const App = () => {
               onRemoveItem={onRemoveItem}
             />
           ))
-        ) : (
-          <p>No products available</p>
         )}
       </div>
     </>
