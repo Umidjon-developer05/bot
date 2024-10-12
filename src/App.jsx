@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Card from "./components/card/card";
 import Cart from "./components/cart/cart";
@@ -16,7 +16,6 @@ const App = () => {
   useEffect(() => {
     productsGetAll()
       .then((data) => {
-        console.log("Fetched products:", data);
         setProducts(data);
       })
       .catch((error) => {
@@ -60,43 +59,6 @@ const App = () => {
     telegram.MainButton.text = "Sotib olish :)";
     telegram.MainButton.show();
   };
-
-  const onSendData = useCallback(() => {
-    const queryID = telegram.initDataUnsafe?.query_id;
-
-    if (queryID) {
-      fetch("http://localhost:8000/web-data", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          products: cartItems,
-          queryID: queryID,
-        }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          console.log("Data sent successfully:", data);
-        })
-        .catch((error) => {
-          console.error("Error sending data:", error);
-        });
-    } else {
-      telegram.sendData(JSON.stringify(cartItems));
-    }
-  }, [cartItems]);
-
-  useEffect(() => {
-    telegram.onEvent("mainButtonClicked", onSendData);
-
-    return () => telegram.offEvent("mainButtonClicked", onSendData);
-  }, [onSendData]);
 
   return (
     <>
