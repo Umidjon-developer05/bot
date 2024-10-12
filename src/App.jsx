@@ -2,35 +2,19 @@ import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import Card from "./components/card/card";
 import Cart from "./components/cart/cart";
-import { categoryGetAll, productsGetAll } from "./api";
-import Category from "./components/category/category";
+import { productsGetAll } from "./api";
 
 const telegram = window.Telegram.WebApp;
 
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
-  const [category, setCategory] = useState([]);
   useEffect(() => {
     telegram.ready();
   });
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const productsData = await productsGetAll();
-        console.log("Fetched products:", productsData); // Ensure this logs the expected structure
-        setProducts(productsData);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    fetchData();
-    categoryGetAll().then((data) => {
-      setCategory(data);
-    });
+    productsGetAll().then((data) => setProducts(data));
   }, []);
-
   const onAddItem = (item) => {
     const existItem = cartItems.find((c) => c.id == item.id);
 
@@ -68,8 +52,9 @@ const App = () => {
 
   const onSendData = useCallback(() => {
     const queryID = telegram.initDataUnsafe?.query_id;
+
     if (queryID) {
-      fetch("http://localhost:8000/web-data", {
+      fetch("https://telegramwebapibot-b671371abfbb.herokuapp.com/web-data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,16 +77,11 @@ const App = () => {
 
   return (
     <>
-      <div className="category__container">
-        {category.map((category) => (
-          <Category key={category.id} category={category} />
-        ))}
-      </div>
       <Cart cartItems={cartItems} onCheckout={onCheckout} />
       <div className="cards__container">
         {products.map((course) => (
           <Card
-            key={course.id}
+            key={course._id}
             course={course}
             onAddItem={onAddItem}
             onRemoveItem={onRemoveItem}
