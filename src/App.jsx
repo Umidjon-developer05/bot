@@ -15,14 +15,22 @@ const App = () => {
     telegram.ready();
   });
   useEffect(() => {
-    productsGetAll().then((data) => {
-      setProducts(data);
-    });
+    const fetchData = async () => {
+      try {
+        const productsData = await productsGetAll();
+        console.log("Fetched products:", productsData); // Ensure this logs the expected structure
+        setProducts(productsData);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchData();
     categoryGetAll().then((data) => {
       setCategory(data);
     });
   }, []);
-  console.log(products);
+
   const onAddItem = (item) => {
     const existItem = cartItems.find((c) => c.id == item.id);
 
