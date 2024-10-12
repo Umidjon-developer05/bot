@@ -9,15 +9,25 @@ const telegram = window?.Telegram?.WebApp;
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     telegram.ready();
 
-    // Fetch products when component mounts
     const fetchProducts = async () => {
-      const fetchedProducts = await productsGetAll();
-      if (fetchedProducts) {
-        setProducts(fetchedProducts);
+      try {
+        const fetchedProducts = await productsGetAll();
+        console.log(fetchedProducts); // Log the fetched products
+
+        if (Array.isArray(fetchedProducts) && fetchedProducts.length > 0) {
+          setProducts(fetchedProducts);
+        } else {
+          setProducts([]); // Ensure to set it to an empty array if no products
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false); // Stop loading state
       }
     };
 
@@ -65,19 +75,17 @@ const App = () => {
     <>
       <Cart cartItems={cartItems} onCheckout={onCheckout} />
       <div className="cards__container">
-        {products.length > 0 ? (
-          products.map(
-            (
-              course // Fixed: products array used here
-            ) => (
-              <Card
-                key={course._id}
-                course={course}
-                onAddItem={onAddItem}
-                onRemoveItem={onRemoveItem}
-              />
-            )
-          )
+        {loading ? (
+          <p>Loading products...</p> // Show loading state
+        ) : products.length > 0 ? (
+          products.map((course) => (
+            <Card
+              key={course._id}
+              course={course}
+              onAddItem={onAddItem}
+              onRemoveItem={onRemoveItem}
+            />
+          ))
         ) : (
           <p>No products available</p>
         )}
