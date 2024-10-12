@@ -87,11 +87,11 @@ const App = () => {
 
   return (
     <>
-      <div className="category__container">
+      {/* <div className="category__container">
         {category.map((category) => (
-            <Category key={category.id} category={category} />
+          <Category key={category.id} category={category} />
         ))}
-      </div>
+      </div> */}
       <Cart cartItems={cartItems} onCheckout={onCheckout} />
       <div className="cards__container">
         {products.map((course) => (
