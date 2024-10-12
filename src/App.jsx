@@ -92,6 +92,7 @@ const App = () => {
           <Category key={category.id} category={category} />
         ))}
       </div> */}
+      <h1>Heollodsddsd</h1>
       <Cart cartItems={cartItems} onCheckout={onCheckout} />
       <div className="cards__container">
         {products.map((course) => (
