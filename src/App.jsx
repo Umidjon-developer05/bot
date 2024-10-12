@@ -65,7 +65,7 @@ const App = () => {
     const queryID = telegram.initDataUnsafe?.query_id;
 
     if (queryID) {
-      fetch("https://telegramwebapibot-b671371abfbb.herokuapp.com/web-data", {
+      fetch("http://localhost:8000/web-data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +74,19 @@ const App = () => {
           products: cartItems,
           queryID: queryID,
         }),
-      });
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Data sent successfully:", data);
+        })
+        .catch((error) => {
+          console.error("Error sending data:", error);
+        });
     } else {
       telegram.sendData(JSON.stringify(cartItems));
     }
