@@ -9,18 +9,30 @@ const telegram = window.Telegram.WebApp;
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
+
   useEffect(() => {
     telegram.ready();
-  });
-  useEffect(() => {
-    productsGetAll().then((data) => setProducts(data));
   }, []);
+
+  useEffect(() => {
+    productsGetAll()
+      .then((data) => {
+        console.log("Fetched products:", data);
+        setProducts(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching products:", error);
+      });
+  }, []);
+
   const onAddItem = (item) => {
-    const existItem = cartItems.find((c) => c.id == item.id);
+    const existItem = cartItems.find((c) => c.id === item.id);
 
     if (existItem) {
       const newData = cartItems.map((c) =>
-        c.id == item.id ? { ...existItem, quantity: existItem.quantity + 1 } : c
+        c.id === item.id
+          ? { ...existItem, quantity: existItem.quantity + 1 }
+          : c
       );
       setCartItems(newData);
     } else {
@@ -30,7 +42,7 @@ const App = () => {
   };
 
   const onRemoveItem = (item) => {
-    const existItem = cartItems.find((c) => c.id == item.id);
+    const existItem = cartItems.find((c) => c.id === item.id);
 
     if (existItem.quantity === 1) {
       const newData = cartItems.filter((c) => c.id !== existItem.id);
@@ -79,14 +91,18 @@ const App = () => {
     <>
       <Cart cartItems={cartItems} onCheckout={onCheckout} />
       <div className="cards__container">
-        {products.map((course) => (
-          <Card
-            key={course._id}
-            course={course}
-            onAddItem={onAddItem}
-            onRemoveItem={onRemoveItem}
-          />
-        ))}
+        {products.length > 0 ? (
+          products.map((course) => (
+            <Card
+              key={course._id}
+              course={course}
+              onAddItem={onAddItem}
+              onRemoveItem={onRemoveItem}
+            />
+          ))
+        ) : (
+          <p>No products available</p>
+        )}
       </div>
     </>
   );
