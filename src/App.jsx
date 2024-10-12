@@ -1,25 +1,20 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Card from "./components/card/card";
 import Cart from "./components/cart/cart";
-import { categoryGetAll, productsGetAll } from "./api";
-import Category from "./components/category/category";
+import { productsGetAll } from "./api";
 
 const telegram = window.Telegram.WebApp;
 
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
-  const [category, setCategory] = useState([]);
   useEffect(() => {
     telegram.ready();
   });
   useEffect(() => {
     productsGetAll().then((data) => {
       setProducts(data);
-    });
-    categoryGetAll().then((data) => {
-      setCategory(data);
     });
   }, []);
   console.log(products);
@@ -60,11 +55,7 @@ const App = () => {
 
   return (
     <>
-      <div className="category__container">
-        {category.map((category) => (
-          <Category key={category._id} category={category} />
-        ))}
-      </div>
+      <div className="category__container"></div>
       <Cart cartItems={cartItems} onCheckout={onCheckout} />
       <div className="cards__container">
         {products.map((course) => (
