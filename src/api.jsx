@@ -1,11 +1,8 @@
 export const productsGetAll = async () => {
   try {
-    const response = await fetch(
-      "http://localhost:8000/api/products/get?secret_key=umidjon",
-      {
-        method: "GET",
-      }
-    );
+    const response = await fetch("https://sergoshtbot.vercel.app/api/product", {
+      method: "GET",
+    });
 
     if (!response.ok) {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
