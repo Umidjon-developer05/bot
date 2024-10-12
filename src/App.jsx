@@ -1,47 +1,34 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import Card from "./components/card/card";
 import Cart from "./components/cart/cart";
-import { productsGetAll } from "./api"; // Ensure you have the correct import
+import { categoryGetAll, productsGetAll } from "./api";
+import Category from "./components/category/category";
 
-const telegram = window?.Telegram?.WebApp;
+const telegram = window.Telegram.WebApp;
 
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading state
-
+  const [category, setCategory] = useState([]);
   useEffect(() => {
     telegram.ready();
-
-    const fetchProducts = async () => {
-      try {
-        const fetchedProducts = await productsGetAll();
-        console.log(fetchedProducts); // Log the fetched products
-
-        if (Array.isArray(fetchedProducts) && fetchedProducts.length > 0) {
-          setProducts(fetchedProducts);
-        } else {
-          setProducts([]); // Ensure to set it to an empty array if no products
-        }
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false); // Stop loading state
-      }
-    };
-
-    fetchProducts();
+  });
+  useEffect(() => {
+    productsGetAll().then((data) => {
+      setProducts(data);
+    });
+    categoryGetAll().then((data) => {
+      setCategory(data);
+    });
   }, []);
-
+  console.log(products);
   const onAddItem = (item) => {
-    const existItem = cartItems.find((c) => c.id === item.id);
+    const existItem = cartItems.find((c) => c.id == item.id);
 
     if (existItem) {
       const newData = cartItems.map((c) =>
-        c.id === item.id
-          ? { ...existItem, quantity: existItem.quantity + 1 }
-          : c
+        c.id == item.id ? { ...existItem, quantity: existItem.quantity + 1 } : c
       );
       setCartItems(newData);
     } else {
@@ -51,7 +38,7 @@ const App = () => {
   };
 
   const onRemoveItem = (item) => {
-    const existItem = cartItems.find((c) => c.id === item.id);
+    const existItem = cartItems.find((c) => c.id == item.id);
 
     if (existItem.quantity === 1) {
       const newData = cartItems.filter((c) => c.id !== existItem.id);
@@ -73,20 +60,21 @@ const App = () => {
 
   return (
     <>
+      <div className="category__container">
+        {category.map((category) => (
+          <Category key={category._id} category={category} />
+        ))}
+      </div>
       <Cart cartItems={cartItems} onCheckout={onCheckout} />
       <div className="cards__container">
-        {loading ? (
-          <p>Loading products...</p> // Show loading state
-        ) : (
-          products.map((course) => (
-            <Card
-              key={course._id}
-              course={course}
-              onAddItem={onAddItem}
-              onRemoveItem={onRemoveItem}
-            />
-          ))
-        )}
+        {products.map((course) => (
+          <Card
+            key={course._id}
+            course={course}
+            onAddItem={onAddItem}
+            onRemoveItem={onRemoveItem}
+          />
+        ))}
       </div>
     </>
   );
