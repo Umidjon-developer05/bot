@@ -13,15 +13,6 @@ const App = () => {
     telegram.ready();
   }, []);
   console.log(telegram);
-  useEffect(() => {
-    productsGetAll()
-      .then((data) => {
-        setProducts(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-      });
-  }, [telegram]);
 
   const onAddItem = (item) => {
     const existItem = cartItems.find((c) => c.id === item.id);
@@ -65,7 +56,7 @@ const App = () => {
       <Cart cartItems={cartItems} onCheckout={onCheckout} />
       <div className="cards__container">
         {products.length > 0 ? (
-          products.map((course) => (
+          [].map((course) => (
             <Card
               key={course._id}
               course={course}
