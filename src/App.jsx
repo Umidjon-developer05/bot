@@ -2,17 +2,27 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Card from "./components/card/card";
 import Cart from "./components/cart/cart";
-import { productsGetAll } from "./api";
+import { productsGetAll } from "./api"; // Ensure you have the correct import
 
 const telegram = window?.Telegram?.WebApp;
 
 const App = () => {
   const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
+
   useEffect(() => {
     telegram.ready();
+
+    // Fetch products when component mounts
+    const fetchProducts = async () => {
+      const fetchedProducts = await productsGetAll();
+      if (fetchedProducts) {
+        setProducts(fetchedProducts);
+      }
+    };
+
+    fetchProducts();
   }, []);
-  console.log(telegram);
 
   const onAddItem = (item) => {
     const existItem = cartItems.find((c) => c.id === item.id);
@@ -56,14 +66,18 @@ const App = () => {
       <Cart cartItems={cartItems} onCheckout={onCheckout} />
       <div className="cards__container">
         {products.length > 0 ? (
-          [].map((course) => (
-            <Card
-              key={course._id}
-              course={course}
-              onAddItem={onAddItem}
-              onRemoveItem={onRemoveItem}
-            />
-          ))
+          products.map(
+            (
+              course // Fixed: products array used here
+            ) => (
+              <Card
+                key={course._id}
+                course={course}
+                onAddItem={onAddItem}
+                onRemoveItem={onRemoveItem}
+              />
+            )
+          )
         ) : (
           <p>No products available</p>
         )}
