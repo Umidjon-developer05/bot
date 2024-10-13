@@ -2,10 +2,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 350px;
-  margin: 13px 10px;
-  border: 4px solid #f3f3f3;
-  padding: 10px;
+  width: 170px; /* Reduced width */
+  border: 3px solid #f3f3f3; /* Slightly thinner border */
   position: relative;
   border-radius: 8px;
 }
@@ -14,51 +12,42 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 40px;
-  height: 40px;
+  width: 35px; /* Smaller badge */
+  height: 35px;
   background-color: rgb(227, 112, 30);
   border-radius: 100%;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translate(20px, -20px) scale(1);
+  transform: translate(15px, -15px) scale(1); /* Adjusted translate */
   transition: all 0.3s ease;
   opacity: 0.8;
-  font-size: 20px;
+  font-size: 16px; /* Smaller font */
   font-weight: bold;
   animation: scaleanimation 1s ease infinite;
   color: #fff;
 }
-
-.card__badge-hidden {
-  display: none;
+.image__container {
+  height: 170px;
 }
-
-@keyframes scaleanimation {
-  to {
-    transform: translate(20px, -20px) scale(1.05);
-    opacity: 1;
-  }
-}
-
 .image__container img {
   width: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .card__body {
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .card__title {
   font-weight: 400;
+  font-size: 14px; /* Adjusted font size */
 }
 
 .card__price {
-  font-size: 24px;
+  font-size: 20px; /* Smaller price font */
   font-weight: bold;
 }
 
@@ -66,12 +55,22 @@
   width: 100%;
   height: 1px;
   background: rgba(128, 128, 128, 0.656);
-  margin-bottom: 10px;
+  margin-bottom: 8px; /* Adjusted margin */
 }
 
 .btn__container {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 12px;
+  gap: 10px; /* Slightly smaller gap */
+  margin-bottom: 10px;
+}
+.btn__container button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }

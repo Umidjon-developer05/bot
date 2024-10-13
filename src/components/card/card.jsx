@@ -19,7 +19,7 @@ const Card = (props) => {
   return (
     <div className="card">
       <span className={`${count !== 0 ? "card__badge" : "card__badge-hidden"}`}>
-        {count}
+        {count === 0 ? "" : count}
       </span>
 
       <div className="image__container">
